@@ -14,6 +14,13 @@
   const overlayMsg = document.getElementById("overlay-msg");
   const overlayBtn = document.getElementById("overlay-btn");
   const muteBtn = document.getElementById("btn-mute");
+  const langBtn = document.getElementById("btn-lang");
+  const overlayLangBtn = document.getElementById("overlay-lang");
+  const langPanel = document.getElementById("lang-panel");
+  const langList = document.getElementById("lang-list");
+  const langTitle = document.getElementById("lang-title");
+  const langClose = document.getElementById("lang-close");
+  const I18N = window.ZIPLA_I18N;
 
   const TILE = 48;
   const GRAVITY = 2200;
@@ -32,7 +39,7 @@
   let totalCoins = 0;
 
   const state = {
-    mode: "title", // title | play | clear | dead | win
+    mode: "title", // title | play | clear | dead | win | gameover
     levelIndex: 0,
     lives: 3,
     coins: 0,
@@ -62,28 +69,46 @@
   let particles = [];
   let sparks = [];
 
-  // Level format: platforms {x,y,w,h,move?}, spikes, enemies, coins, flag, spawn, width
-  // Coordinates in tiles (TILE px), converted on load.
+  // Level format: platforms [x,y,w,h], spikes [x,y,w], enemies [x,y],
+  // movers {x,y,w,h,ax,ay,bx,by,speed}, coins, flag, spawn, width (tiles).
   const LEVELS = [
     {
       name: "Sahil",
-      width: 28,
+      width: 26,
       spawn: [2, 8],
       platforms: [
         [0, 10, 8, 2],
         [10, 10, 4, 2],
         [16, 9, 3, 1],
-        [21, 8, 7, 4],
+        [21, 8, 5, 4],
       ],
       spikes: [[14, 10, 2]],
       enemies: [],
       movers: [],
       coins: [[5, 8], [11, 8], [17, 7], [23, 6]],
-      flag: [25, 6],
+      flag: [24, 6],
+    },
+    {
+      name: "Adımlar",
+      width: 28,
+      spawn: [1, 9],
+      platforms: [
+        [0, 10, 4, 2],
+        [5, 9, 3, 1],
+        [9, 8, 3, 1],
+        [13, 7, 3, 1],
+        [17, 8, 3, 1],
+        [22, 7, 6, 5],
+      ],
+      spikes: [[4, 10, 1], [12, 10, 1]],
+      enemies: [],
+      movers: [],
+      coins: [[2, 8], [6, 7], [10, 6], [14, 5], [18, 6], [24, 5]],
+      flag: [25, 5],
     },
     {
       name: "Köprüler",
-      width: 32,
+      width: 30,
       spawn: [1, 8],
       platforms: [
         [0, 10, 5, 2],
@@ -91,60 +116,248 @@
         [12, 8, 3, 1],
         [17, 7, 2, 1],
         [21, 9, 3, 1],
-        [26, 8, 6, 4],
+        [25, 8, 5, 4],
       ],
-      spikes: [[5, 10, 2], [15, 10, 2], [24, 10, 2]],
+      spikes: [[5, 10, 2], [15, 10, 2], [24, 10, 1]],
       enemies: [[9, 8], [22, 8]],
       movers: [],
-      coins: [[3, 8], [8, 7], [13, 6], [18, 5], [27, 6]],
-      flag: [29, 6],
+      coins: [[3, 8], [8, 7], [13, 6], [18, 5], [26, 6]],
+      flag: [28, 6],
+    },
+    {
+      name: "Dikenlik",
+      width: 30,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 4, 2],
+        [6, 9, 2, 1],
+        [10, 8, 2, 1],
+        [14, 9, 3, 1],
+        [19, 8, 2, 1],
+        [23, 7, 7, 5],
+      ],
+      spikes: [[4, 10, 2], [8, 10, 2], [12, 10, 2], [17, 10, 2], [21, 10, 2]],
+      enemies: [[15, 8]],
+      movers: [],
+      coins: [[2, 8], [7, 7], [11, 6], [15, 7], [20, 6], [25, 5]],
+      flag: [27, 5],
     },
     {
       name: "Salıncak",
-      width: 34,
+      width: 32,
       spawn: [1, 7],
       platforms: [
         [0, 9, 4, 3],
         [8, 10, 3, 2],
         [18, 10, 3, 2],
-        [28, 8, 6, 4],
+        [26, 8, 6, 4],
       ],
-      spikes: [[4, 10, 4], [11, 10, 7], [21, 10, 7]],
+      spikes: [[4, 10, 4], [11, 10, 7], [21, 10, 5]],
       enemies: [[9, 9]],
       movers: [
         { x: 5, y: 7, w: 2, h: 0.5, ax: 5, ay: 7, bx: 14, by: 5, speed: 70 },
-        { x: 16, y: 6, w: 2, h: 0.5, ax: 16, ay: 6, bx: 24, by: 7, speed: 80 },
+        { x: 16, y: 6, w: 2, h: 0.5, ax: 16, ay: 6, bx: 22, by: 7, speed: 80 },
       ],
-      coins: [[2, 7], [6, 5], [12, 4], [20, 5], [30, 6]],
-      flag: [31, 6],
+      coins: [[2, 7], [6, 5], [12, 4], [20, 5], [28, 6]],
+      flag: [29, 6],
     },
     {
-      name: "Dikenler",
-      width: 36,
+      name: "Devriye",
+      width: 32,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 5, 2],
+        [7, 9, 4, 1],
+        [13, 8, 4, 1],
+        [19, 9, 3, 1],
+        [24, 8, 8, 4],
+      ],
+      spikes: [[5, 10, 2], [11, 10, 2], [17, 10, 2], [22, 10, 2]],
+      enemies: [[8, 8], [14, 7], [20, 8], [26, 7]],
+      movers: [],
+      coins: [[3, 8], [9, 7], [15, 6], [21, 7], [27, 6]],
+      flag: [29, 6],
+    },
+    {
+      name: "Asansör",
+      width: 30,
+      spawn: [1, 9],
+      platforms: [
+        [0, 10, 4, 2],
+        [12, 10, 3, 2],
+        [24, 7, 6, 5],
+      ],
+      spikes: [[4, 10, 8], [15, 10, 9]],
+      enemies: [[13, 9]],
+      movers: [
+        { x: 5, y: 8, w: 2, h: 0.5, ax: 5, ay: 8, bx: 5, by: 4, speed: 65 },
+        { x: 17, y: 5, w: 2, h: 0.5, ax: 17, ay: 5, bx: 17, by: 9, speed: 70 },
+      ],
+      coins: [[2, 8], [5, 3], [13, 8], [17, 4], [26, 5]],
+      flag: [27, 5],
+    },
+    {
+      name: "Uçurum",
+      width: 34,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 3, 2],
+        [5, 9, 2, 1],
+        [9, 8, 2, 1],
+        [14, 9, 2, 1],
+        [18, 7, 2, 1],
+        [23, 8, 2, 1],
+        [28, 7, 6, 5],
+      ],
+      spikes: [[3, 10, 2], [7, 10, 2], [11, 10, 3], [16, 10, 2], [20, 10, 3], [25, 10, 3]],
+      enemies: [[15, 8], [24, 7]],
+      movers: [],
+      coins: [[2, 8], [6, 7], [10, 6], [15, 7], [19, 5], [24, 6], [30, 5]],
+      flag: [31, 5],
+    },
+    {
+      name: "Çift Yol",
+      width: 34,
       spawn: [1, 8],
       platforms: [
         [0, 10, 4, 2],
-        [5, 8, 2, 1],
-        [8, 6, 2, 1],
-        [12, 8, 3, 1],
-        [17, 10, 4, 2],
-        [23, 8, 2, 1],
-        [27, 6, 2, 1],
-        [31, 8, 5, 4],
+        [6, 8, 3, 1],
+        [6, 5, 3, 1],
+        [12, 9, 3, 1],
+        [12, 6, 3, 1],
+        [18, 8, 3, 1],
+        [18, 5, 3, 1],
+        [24, 7, 3, 1],
+        [28, 8, 6, 4],
+      ],
+      spikes: [[4, 10, 2], [9, 10, 3], [15, 10, 3], [21, 10, 3], [27, 10, 1]],
+      enemies: [[7, 7], [13, 5], [19, 7], [25, 6]],
+      movers: [],
+      coins: [[2, 8], [7, 3], [13, 4], [19, 3], [25, 5], [30, 6]],
+      flag: [31, 6],
+    },
+    {
+      name: "Tempo",
+      width: 34,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 4, 2],
+        [14, 10, 3, 2],
+        [28, 8, 6, 4],
+      ],
+      spikes: [[4, 10, 10], [17, 10, 11]],
+      enemies: [[15, 9]],
+      movers: [
+        { x: 5, y: 7, w: 2, h: 0.5, ax: 5, ay: 7, bx: 12, by: 5, speed: 110 },
+        { x: 18, y: 6, w: 2, h: 0.5, ax: 18, ay: 6, bx: 25, by: 4, speed: 120 },
+      ],
+      coins: [[2, 8], [8, 4], [15, 8], [21, 3], [30, 6]],
+      flag: [31, 6],
+    },
+    {
+      name: "Labirent",
+      width: 36,
+      spawn: [1, 9],
+      platforms: [
+        [0, 10, 3, 2],
+        [4, 8, 2, 1],
+        [7, 6, 2, 1],
+        [10, 8, 2, 1],
+        [13, 6, 2, 1],
+        [16, 8, 2, 1],
+        [19, 6, 2, 1],
+        [22, 8, 2, 1],
+        [25, 6, 2, 1],
+        [29, 7, 7, 5],
       ],
       spikes: [
-        [4, 10, 1],
-        [7, 10, 5],
-        [15, 10, 2],
-        [21, 10, 2],
-        [25, 10, 6],
+        [3, 10, 1],
+        [6, 10, 1],
+        [9, 10, 1],
+        [12, 10, 1],
+        [15, 10, 1],
+        [18, 10, 1],
+        [21, 10, 1],
+        [24, 10, 1],
+        [27, 10, 2],
       ],
-      enemies: [[13, 7], [18, 9], [32, 7]],
+      enemies: [[11, 7], [17, 7], [23, 7]],
+      movers: [],
+      coins: [[2, 8], [5, 6], [8, 4], [14, 4], [20, 4], [26, 4], [31, 5]],
+      flag: [33, 5],
+    },
+    {
+      name: "Fırtına",
+      width: 36,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 3, 2],
+        [8, 10, 3, 2],
+        [18, 9, 3, 1],
+        [30, 7, 6, 5],
+      ],
+      spikes: [[3, 10, 5], [11, 10, 7], [21, 10, 9]],
+      enemies: [[9, 9], [19, 8], [32, 6]],
       movers: [
-        { x: 20, y: 5, w: 2, h: 0.5, ax: 20, ay: 5, bx: 20, by: 8, speed: 60 },
+        { x: 4, y: 7, w: 2, h: 0.5, ax: 4, ay: 7, bx: 4, by: 4, speed: 95 },
+        { x: 12, y: 6, w: 2, h: 0.5, ax: 12, ay: 6, bx: 16, by: 4, speed: 100 },
+        { x: 22, y: 5, w: 2, h: 0.5, ax: 22, ay: 5, bx: 27, by: 7, speed: 105 },
       ],
-      coins: [[6, 6], [9, 4], [13, 6], [19, 8], [24, 6], [28, 4], [33, 6]],
-      flag: [34, 6],
+      coins: [[2, 8], [4, 3], [9, 8], [14, 3], [19, 7], [24, 4], [32, 5]],
+      flag: [33, 5],
+    },
+    {
+      name: "Dar Geçit",
+      width: 36,
+      spawn: [1, 9],
+      platforms: [
+        [0, 10, 3, 2],
+        [5, 9, 1.5, 1],
+        [8, 7, 1.5, 1],
+        [11, 9, 1.5, 1],
+        [14, 7, 1.5, 1],
+        [17, 5, 1.5, 1],
+        [20, 7, 1.5, 1],
+        [23, 9, 1.5, 1],
+        [26, 7, 1.5, 1],
+        [30, 8, 6, 4],
+      ],
+      spikes: [
+        [3, 10, 2],
+        [6.5, 10, 1.5],
+        [9.5, 10, 1.5],
+        [12.5, 10, 1.5],
+        [15.5, 10, 1.5],
+        [18.5, 10, 1.5],
+        [21.5, 10, 1.5],
+        [24.5, 10, 1.5],
+        [27.5, 10, 2.5],
+      ],
+      enemies: [[12, 8], [21, 6], [31, 7]],
+      movers: [
+        { x: 16, y: 3, w: 1.5, h: 0.5, ax: 16, ay: 3, bx: 19, by: 3, speed: 80 },
+      ],
+      coins: [[2, 8], [6, 7], [9, 5], [15, 3], [18, 3], [24, 7], [32, 6]],
+      flag: [33, 6],
+    },
+    {
+      name: "Gece Devriyesi",
+      width: 38,
+      spawn: [1, 8],
+      platforms: [
+        [0, 10, 4, 2],
+        [6, 9, 3, 1],
+        [11, 8, 3, 1],
+        [16, 9, 3, 1],
+        [21, 8, 3, 1],
+        [26, 7, 3, 1],
+        [31, 8, 7, 4],
+      ],
+      spikes: [[4, 10, 2], [9, 10, 2], [14, 10, 2], [19, 10, 2], [24, 10, 2], [29, 10, 2]],
+      enemies: [[7, 8], [12, 7], [17, 8], [22, 7], [27, 6], [33, 7]],
+      movers: [],
+      coins: [[2, 8], [7, 7], [12, 6], [17, 7], [22, 6], [27, 5], [33, 6]],
+      flag: [35, 6],
     },
     {
       name: "Zirve",
@@ -171,8 +384,8 @@
       ],
       enemies: [[15, 9], [21, 7], [31, 7], [36, 6]],
       movers: [
-        { x: 11, y: 6, w: 2, h: 0.5, ax: 11, ay: 6, bx: 17, by: 4, speed: 90 },
-        { x: 23, y: 4, w: 2, h: 0.5, ax: 23, ay: 4, bx: 28, by: 7, speed: 85 },
+        { x: 11, y: 6, w: 2, h: 0.5, ax: 11, ay: 6, bx: 17, by: 4, speed: 95 },
+        { x: 23, y: 4, w: 2, h: 0.5, ax: 23, ay: 4, bx: 28, by: 7, speed: 90 },
       ],
       coins: [
         [2, 9],
@@ -185,6 +398,51 @@
         [36, 5],
       ],
       flag: [38, 5],
+    },
+    {
+      name: "Final Ada",
+      width: 42,
+      spawn: [1, 9],
+      platforms: [
+        [0, 11, 3, 2],
+        [5, 10, 1.5, 1],
+        [9, 8, 1.5, 1],
+        [13, 10, 2, 1],
+        [18, 8, 1.5, 1],
+        [22, 6, 1.5, 1],
+        [26, 8, 1.5, 1],
+        [30, 6, 1.5, 1],
+        [35, 7, 7, 5],
+      ],
+      spikes: [
+        [3, 11, 2],
+        [6.5, 11, 2.5],
+        [10.5, 11, 2.5],
+        [15, 11, 3],
+        [19.5, 11, 2.5],
+        [23.5, 11, 2.5],
+        [27.5, 11, 2.5],
+        [31.5, 11, 3.5],
+      ],
+      enemies: [[14, 9], [19, 7], [27, 7], [36, 6], [38, 6]],
+      movers: [
+        { x: 7, y: 6, w: 1.5, h: 0.5, ax: 7, ay: 6, bx: 11, by: 4, speed: 115 },
+        { x: 16, y: 5, w: 1.5, h: 0.5, ax: 16, ay: 5, bx: 16, by: 8, speed: 100 },
+        { x: 24, y: 4, w: 1.5, h: 0.5, ax: 24, ay: 4, bx: 28, by: 6, speed: 120 },
+        { x: 32, y: 4, w: 1.5, h: 0.5, ax: 32, ay: 4, bx: 32, by: 7, speed: 110 },
+      ],
+      coins: [
+        [2, 9],
+        [6, 8],
+        [10, 6],
+        [14, 8],
+        [19, 6],
+        [23, 4],
+        [27, 6],
+        [31, 4],
+        [37, 5],
+      ],
+      flag: [39, 5],
     },
   ];
 
@@ -289,10 +547,56 @@
     player.alive = true;
   }
 
+  function tr(key, vars) {
+    return I18N ? I18N.t(key, vars) : key;
+  }
+
+  function currentLangMeta() {
+    if (!I18N) return { code: "en", flag: "🌐" };
+    return I18N.LANGS.find((l) => l.code === I18N.getLang()) || I18N.LANGS[0];
+  }
+
   function updateHud() {
-    hudLevel.textContent = `Seviye ${state.levelIndex + 1}/${LEVELS.length}`;
-    hudLives.textContent = `Can ${"★".repeat(Math.max(0, state.lives))}${"☆".repeat(Math.max(0, 3 - state.lives))}`;
+    hudLevel.textContent = `${tr("level")} ${state.levelIndex + 1}/${LEVELS.length}`;
+    hudLives.textContent = `${tr("lives")} ${"★".repeat(Math.max(0, state.lives))}${"☆".repeat(Math.max(0, 3 - state.lives))}`;
     hudCoins.textContent = `◆ ${state.coins}`;
+  }
+
+  function updateChrome() {
+    const meta = currentLangMeta();
+    langBtn.textContent = `${meta.flag} ${meta.code.toUpperCase()}`;
+    langBtn.setAttribute("aria-label", tr("language"));
+    langBtn.title = tr("language");
+    muteBtn.textContent = muted ? tr("mute") : tr("sound");
+    muteBtn.setAttribute("aria-label", muted ? tr("mute") : tr("sound"));
+    overlayLangBtn.textContent = `🌐 ${tr("language")}`;
+    langTitle.textContent = tr("language");
+    langClose.textContent = tr("closeLang");
+    updateHud();
+    if (!overlay.classList.contains("hidden")) {
+      refreshOverlayForMode();
+    }
+    buildLangList();
+  }
+
+  function refreshOverlayForMode() {
+    if (state.mode === "title") {
+      showOverlay(tr("titleHeadline"), tr("titleMsg"), tr("start"));
+    } else if (state.mode === "clear") {
+      showOverlay(
+        tr("levelClear", { n: state.levelIndex + 1 }),
+        tr("levelPassed", { name: LEVELS[state.levelIndex].name }),
+        tr("nextLevel")
+      );
+    } else if (state.mode === "win") {
+      showOverlay(
+        tr("winTitle"),
+        tr("winMsg", { count: LEVELS.length, coins: state.coins }),
+        tr("retry")
+      );
+    } else if (state.mode === "gameover") {
+      showOverlay(tr("gameOver"), tr("gameOverMsg"), tr("retry"));
+    }
   }
 
   function showOverlay(title, msg, btn) {
@@ -304,6 +608,37 @@
 
   function hideOverlay() {
     overlay.classList.add("hidden");
+  }
+
+  function buildLangList() {
+    if (!I18N || !langList) return;
+    langList.innerHTML = "";
+    const active = I18N.getLang();
+    for (const lang of I18N.LANGS) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "option");
+      btn.setAttribute("aria-selected", lang.code === active ? "true" : "false");
+      if (lang.code === active) btn.classList.add("active");
+      btn.innerHTML = `<span>${lang.flag}</span><span>${lang.name}</span><span class="code">${lang.code}</span>`;
+      btn.addEventListener("click", () => {
+        I18N.setLang(lang.code);
+        closeLangPanel();
+        updateChrome();
+      });
+      langList.appendChild(btn);
+    }
+  }
+
+  function openLangPanel() {
+    buildLangList();
+    langPanel.classList.remove("hidden");
+    langPanel.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLangPanel() {
+    langPanel.classList.add("hidden");
+    langPanel.setAttribute("aria-hidden", "true");
   }
 
   function ensureAudio() {
@@ -630,16 +965,16 @@
       if (state.levelIndex >= LEVELS.length - 1) {
         state.mode = "win";
         showOverlay(
-          "Tebrikler!",
-          `Tüm ${LEVELS.length} seviyeyi bitirdin. Toplam ◆ ${state.coins}`,
-          "Tekrar"
+          tr("winTitle"),
+          tr("winMsg", { count: LEVELS.length, coins: state.coins }),
+          tr("retry")
         );
       } else {
         state.mode = "clear";
         showOverlay(
-          `Seviye ${state.levelIndex + 1} tamam!`,
-          `${LEVELS[state.levelIndex].name} geçildi. Hazır mısın?`,
-          "Sonraki seviye"
+          tr("levelClear", { n: state.levelIndex + 1 }),
+          tr("levelPassed", { name: LEVELS[state.levelIndex].name }),
+          tr("nextLevel")
         );
       }
     }
@@ -680,8 +1015,8 @@
       state.deathTimer -= dt;
       if (state.deathTimer <= 0) {
         if (state.lives <= 0) {
-          state.mode = "title";
-          showOverlay("Oyun bitti", "Canların bitti. Bir daha dene!", "Tekrar");
+          state.mode = "gameover";
+          showOverlay(tr("gameOver"), tr("gameOverMsg"), tr("retry"));
         } else {
           resetPlayer();
           state.mode = "play";
@@ -1002,13 +1337,21 @@
   muteBtn.addEventListener("click", () => {
     muted = !muted;
     muteBtn.classList.toggle("muted", muted);
-    muteBtn.textContent = muted ? "Sessiz" : "Ses";
+    muteBtn.textContent = muted ? tr("mute") : tr("sound");
+    muteBtn.setAttribute("aria-label", muted ? tr("mute") : tr("sound"));
     if (!muted) ensureAudio();
+  });
+
+  langBtn.addEventListener("click", () => openLangPanel());
+  overlayLangBtn.addEventListener("click", () => openLangPanel());
+  langClose.addEventListener("click", () => closeLangPanel());
+  langPanel.addEventListener("click", (e) => {
+    if (e.target === langPanel) closeLangPanel();
   });
 
   overlayBtn.addEventListener("click", () => {
     ensureAudio();
-    if (state.mode === "title" || (state.mode === "win" && overlayBtn.textContent === "Tekrar")) {
+    if (state.mode === "title" || state.mode === "win" || state.mode === "gameover") {
       state.levelIndex = 0;
       state.lives = 3;
       state.coins = 0;
@@ -1023,16 +1366,6 @@
       loadLevel(state.levelIndex);
       state.mode = "play";
       hideOverlay();
-      return;
-    }
-    if (state.mode === "dead" || overlayBtn.textContent === "Tekrar") {
-      state.levelIndex = 0;
-      state.lives = 3;
-      state.coins = 0;
-      loadLevel(0);
-      state.mode = "play";
-      hideOverlay();
-      updateHud();
     }
   });
 
@@ -1050,6 +1383,7 @@
   // Boot
   loadLevel(0);
   state.mode = "title";
-  showOverlay("Macera başlıyor", "Kısa seviyeler, büyük zıplamalar. Bayrağa ulaş!", "Başla");
+  updateChrome();
+  showOverlay(tr("titleHeadline"), tr("titleMsg"), tr("start"));
   requestAnimationFrame(frame);
 })();
