@@ -1,6 +1,8 @@
 # Zıpla Ada
 
-Kısa, eğlenceli 2D platform oyunu — 16 seviye, 30 dil, dokunmatik ve klavye.
+Kısa, eğlenceli 2D ada-hop platform oyunu — 16 seviye, 30 dil, dokunmatik ve klavye.
+
+İmza mekanikler: **Echo Jump** (zaman yankısı), **Ada Rüzgarı**, gizli **Ada Parıltıları** (skin/tint), seviye sonu **Foto Anı**, finalde **Yengeç Ada** boss.
 
 ## Çalıştırma
 
