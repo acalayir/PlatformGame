@@ -239,11 +239,12 @@
       spikes: [[4, 10, 4], [11, 10, 7], [21, 10, 5]],
       enemies: [[9, 9]],
       movers: [
-        { x: 5, y: 7, w: 2, h: 0.5, ax: 5, ay: 7, bx: 14, by: 5, speed: 70 },
-        { x: 16, y: 6, w: 2, h: 0.5, ax: 16, ay: 6, bx: 22, by: 7, speed: 80 },
+        // Closer / slower first swing so the opening jump can land reliably.
+        { x: 3.5, y: 7.2, w: 3.2, h: 0.65, ax: 3.5, ay: 7.2, bx: 11, by: 5.8, speed: 55 },
+        { x: 14.5, y: 6.2, w: 3.2, h: 0.65, ax: 14.5, ay: 6.2, bx: 21.5, by: 7, speed: 65 },
       ],
       coins: [[2, 7], [6, 5], [12, 4], [20, 5], [28, 6]],
-      wind: [{ x: 10, y: 2, w: 10, h: 8, force: 140 }],
+      wind: [{ x: 10, y: 2, w: 10, h: 8, force: 120 }],
       shimmers: [[3, 5], [15, 3], [27, 4]],
       flag: [29, 6],
     },
@@ -276,8 +277,8 @@
       spikes: [[4, 10, 8], [15, 10, 9]],
       enemies: [[13, 9]],
       movers: [
-        { x: 5, y: 8, w: 2, h: 0.5, ax: 5, ay: 8, bx: 5, by: 4, speed: 65 },
-        { x: 17, y: 5, w: 2, h: 0.5, ax: 17, ay: 5, bx: 17, by: 9, speed: 70 },
+        { x: 5, y: 8, w: 2.5, h: 0.6, ax: 5, ay: 8, bx: 5, by: 4, speed: 65 },
+        { x: 17, y: 5, w: 2.5, h: 0.6, ax: 17, ay: 5, bx: 17, by: 9, speed: 70 },
       ],
       coins: [[2, 8], [5, 3], [13, 8], [17, 4], [26, 5]],
       wind: [{ x: 6, y: 2, w: 8, h: 8, force: -120 }],
@@ -337,8 +338,8 @@
       spikes: [[4, 10, 10], [17, 10, 11]],
       enemies: [[15, 9]],
       movers: [
-        { x: 5, y: 7, w: 2, h: 0.5, ax: 5, ay: 7, bx: 12, by: 5, speed: 110 },
-        { x: 18, y: 6, w: 2, h: 0.5, ax: 18, ay: 6, bx: 25, by: 4, speed: 120 },
+        { x: 5, y: 7, w: 2.5, h: 0.6, ax: 5, ay: 7, bx: 12, by: 5, speed: 110 },
+        { x: 18, y: 6, w: 2.5, h: 0.6, ax: 18, ay: 6, bx: 25, by: 4, speed: 120 },
       ],
       coins: [[2, 8], [8, 4], [15, 8], [21, 3], [30, 6]],
       wind: [{ x: 6, y: 2, w: 12, h: 8, force: 160 }],
@@ -390,9 +391,9 @@
       spikes: [[3, 10, 5], [11, 10, 7], [21, 10, 9]],
       enemies: [[9, 9], [19, 8], [32, 6]],
       movers: [
-        { x: 4, y: 7, w: 2, h: 0.5, ax: 4, ay: 7, bx: 4, by: 4, speed: 95 },
-        { x: 12, y: 6, w: 2, h: 0.5, ax: 12, ay: 6, bx: 16, by: 4, speed: 100 },
-        { x: 22, y: 5, w: 2, h: 0.5, ax: 22, ay: 5, bx: 27, by: 7, speed: 105 },
+        { x: 4, y: 7, w: 2.5, h: 0.6, ax: 4, ay: 7, bx: 4, by: 4, speed: 95 },
+        { x: 12, y: 6, w: 2.5, h: 0.6, ax: 12, ay: 6, bx: 16, by: 4, speed: 100 },
+        { x: 22, y: 5, w: 2.5, h: 0.6, ax: 22, ay: 5, bx: 27, by: 7, speed: 105 },
       ],
       coins: [[2, 8], [4, 3], [9, 8], [14, 3], [19, 7], [24, 4], [32, 5]],
       wind: [{ x: 3, y: 1, w: 14, h: 9, force: 180 }, { x: 18, y: 1, w: 12, h: 9, force: -150 }],
@@ -428,7 +429,7 @@
       ],
       enemies: [[12, 8], [21, 6], [31, 7]],
       movers: [
-        { x: 16, y: 3, w: 1.5, h: 0.5, ax: 16, ay: 3, bx: 19, by: 3, speed: 80 },
+        { x: 16, y: 3, w: 2, h: 0.6, ax: 16, ay: 3, bx: 19, by: 3, speed: 80 },
       ],
       coins: [[2, 8], [6, 7], [9, 5], [15, 3], [18, 3], [24, 7], [32, 6]],
       wind: [{ x: 14, y: 1, w: 10, h: 8, force: 110 }],
@@ -479,8 +480,8 @@
       ],
       enemies: [[15, 9], [21, 7], [31, 7], [36, 6]],
       movers: [
-        { x: 11, y: 6, w: 2, h: 0.5, ax: 11, ay: 6, bx: 17, by: 4, speed: 95 },
-        { x: 23, y: 4, w: 2, h: 0.5, ax: 23, ay: 4, bx: 28, by: 7, speed: 90 },
+        { x: 11, y: 6, w: 2.5, h: 0.6, ax: 11, ay: 6, bx: 17, by: 4, speed: 95 },
+        { x: 23, y: 4, w: 2.5, h: 0.6, ax: 23, ay: 4, bx: 28, by: 7, speed: 90 },
       ],
       coins: [
         [2, 9],
@@ -863,6 +864,13 @@
     return [...level.platforms, ...level.movers];
   }
 
+  // How far below a platform top we still accept a landing (tunneling / jitter).
+  const LAND_SNAP = 10;
+
+  function overlaps(x, y, w, h, p) {
+    return x < p.x + p.w && x + w > p.x && y < p.y + p.h && y + h > p.y;
+  }
+
   function resolveSolid(px, py, pw, ph, vx, vy) {
     let x = px;
     let y = py;
@@ -870,28 +878,80 @@
     let ny = vy;
     let grounded = false;
     let ride = null;
+    const prevBottom = py + ph;
 
-    // Horizontal
+    // Horizontal — solids only. Movers are one-way tops (no wall hitbox),
+    // so side scrapes don't shove you off before vertical landing resolves.
     x += vx;
     for (const p of rects()) {
-      if (x < p.x + p.w && x + pw > p.x && y < p.y + p.h && y + ph > p.y) {
-        if (vx > 0) x = p.x - pw;
-        else if (vx < 0) x = p.x + p.w;
-        nx = 0;
+      if (p.kind === "mover") continue;
+      if (!overlaps(x, y, pw, ph, p)) continue;
+      // If feet were already above this top, treat as pending land — skip wall push.
+      if (prevBottom <= p.y + LAND_SNAP && vy >= 0) continue;
+      if (vx > 0) x = p.x - pw;
+      else if (vx < 0) x = p.x + p.w;
+      else {
+        const penL = x + pw - p.x;
+        const penR = p.x + p.w - x;
+        x = penL < penR ? p.x - pw : p.x + p.w;
       }
+      nx = 0;
     }
 
     // Vertical
     y += vy;
     for (const p of rects()) {
-      if (x < p.x + p.w && x + pw > p.x && y < p.y + p.h && y + ph > p.y) {
-        if (vy > 0) {
+      if (!overlaps(x, y, pw, ph, p)) continue;
+
+      if (p.kind === "mover") {
+        // One-way top: land when falling onto the surface. Snap threshold
+        // scales with fall speed so fast drops / side-entries still catch.
+        if (vy >= 0) {
+          const foot = y + ph;
+          const snap = Math.max(LAND_SNAP, Math.min(ph - 2, Math.abs(vy) + 8));
+          const fromAbove = prevBottom <= p.y + snap;
+          const shallow =
+            foot >= p.y && foot <= p.y + p.h + snap && y <= p.y + 6;
+          if (fromAbove || shallow) {
+            y = p.y - ph;
+            grounded = true;
+            ride = p;
+            ny = 0;
+          }
+        }
+        continue;
+      }
+
+      if (vy > 0 || (vy >= 0 && prevBottom <= p.y + LAND_SNAP)) {
+        // Prefer top landing when approaching from above (fixes side-hit steal).
+        if (prevBottom <= p.y + LAND_SNAP) {
           y = p.y - ph;
           grounded = true;
-          if (p.kind === "mover") ride = p;
-        } else if (vy < 0) {
-          y = p.y + p.h;
+          ny = 0;
+        } else {
+          // Embedded from the side/inside while falling — push to nearest face.
+          const penT = y + ph - p.y;
+          const penB = p.y + p.h - y;
+          const penL = x + pw - p.x;
+          const penR = p.x + p.w - x;
+          const minPen = Math.min(penT, penB, penL, penR);
+          if (minPen === penT) {
+            y = p.y - ph;
+            grounded = true;
+            ny = 0;
+          } else if (minPen === penB) {
+            y = p.y + p.h;
+            ny = 0;
+          } else if (minPen === penL) {
+            x = p.x - pw;
+            nx = 0;
+          } else {
+            x = p.x + p.w;
+            nx = 0;
+          }
         }
+      } else if (vy < 0) {
+        y = p.y + p.h;
         ny = 0;
       }
     }
@@ -1102,6 +1162,16 @@
     updateHud();
   }
 
+  function feetOnMover(m, px, py, pw, ph) {
+    const feet = py + ph;
+    return (
+      px + pw > m.x + 2 &&
+      px < m.x + m.w - 2 &&
+      feet >= m.y - 2 &&
+      feet <= m.y + LAND_SNAP
+    );
+  }
+
   function updateMovers(dt) {
     for (const m of level.movers) {
       const dx = m.bx - m.ax;
@@ -1118,8 +1188,22 @@
       }
       const nx = m.ax + dx * m.t;
       const ny = m.ay + dy * m.t;
-      m.vx = (nx - m.x) / dt;
-      m.vy = (ny - m.y) / dt;
+      const mx = nx - m.x;
+      const my = ny - m.y;
+      m.vx = dt > 0 ? mx / dt : 0;
+      m.vy = dt > 0 ? my / dt : 0;
+
+      // Carry rider with the platform *as it moves* (before player resolve),
+      // so the top doesn't slide out from under their feet.
+      if (
+        player.alive &&
+        player.onGround &&
+        feetOnMover(m, player.x, player.y, player.w, player.h)
+      ) {
+        player.x += mx;
+        player.y += my;
+      }
+
       m.x = nx;
       m.y = ny;
     }
@@ -1198,7 +1282,8 @@
     } else {
       player.vx *= Math.pow(FRICTION, dt * 60);
     }
-    player.vx += wind * dt;
+    // Grounded: damp wind so thin platforms stay standable; air keeps full push.
+    player.vx += wind * dt * (player.onGround ? 0.5 : 1);
     const windCap = MAX_RUN + Math.min(90, Math.abs(wind) * 0.35);
     player.vx = Math.max(-windCap, Math.min(windCap, player.vx));
 
@@ -1262,9 +1347,13 @@
     if (res.vy === 0) player.vy = 0;
 
     player.onGround = res.grounded;
-    if (res.ride) {
-      player.x += res.ride.vx * dt;
-      player.y += res.ride.vy * dt;
+    // Ride velocity is applied in updateMovers (pre-carry). Do not add it again
+    // here — that double-moved the player relative to an already-updated mover.
+
+    // Soft left bound: clamp at map edge (no death). Void below still kills.
+    if (player.x < 0) {
+      player.x = 0;
+      if (player.vx < 0) player.vx = 0;
     }
 
     if (player.onGround && !wasGrounded) {
@@ -2188,6 +2277,17 @@
     if (state.mode === "polaroid" && meta.polaroid) meta.polaroid.skip = true;
   }
 
+  function startLevelIndexFromQuery() {
+    try {
+      const raw = new URLSearchParams(window.location.search).get("level");
+      const n = raw ? parseInt(raw, 10) : 1;
+      if (!Number.isFinite(n)) return 0;
+      return Math.max(0, Math.min(LEVELS.length - 1, n - 1));
+    } catch (_) {
+      return 0;
+    }
+  }
+
   overlayBtn.addEventListener("click", () => {
     ensureAudio();
     if (state.mode === "polaroid") {
@@ -2195,10 +2295,10 @@
       return;
     }
     if (state.mode === "title" || state.mode === "win" || state.mode === "gameover") {
-      state.levelIndex = 0;
+      state.levelIndex = startLevelIndexFromQuery();
       state.lives = 3;
       state.coins = 0;
-      loadLevel(0);
+      loadLevel(state.levelIndex);
       state.mode = "play";
       hideOverlay();
       updateHud();
@@ -2242,4 +2342,25 @@
   updateChrome();
   showOverlay(tr("titleHeadline"), tr("titleMsg"), tr("start"));
   requestAnimationFrame(frame);
+
+  // Read-only probe for automated / manual QA (e.g. ?level=5).
+  window.__ZIPLA_DEBUG__ = () => ({
+    mode: state.mode,
+    level: state.levelIndex + 1,
+    lives: state.lives,
+    x: player.x,
+    y: player.y,
+    vx: player.vx,
+    vy: player.vy,
+    onGround: player.onGround,
+    alive: player.alive,
+    camX: state.camX,
+    movers: (level.movers || []).map((m) => ({
+      x: m.x,
+      y: m.y,
+      w: m.w,
+      h: m.h,
+      t: m.t,
+    })),
+  });
 })();
