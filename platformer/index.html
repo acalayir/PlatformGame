@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0e2a2f" />
+  <meta name="description" content="Zıpla Ada — kısa 5 seviyeli 2D platform oyunu" />
+  <title>Zıpla Ada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game" width="960" height="540"></canvas>
+
+    <div id="hud">
+      <span id="hud-level">Seviye 1</span>
+      <span id="hud-lives">Can ★★★</span>
+      <span id="hud-coins">◆ 0</span>
+    </div>
+
+    <button id="btn-mute" type="button" aria-label="Ses">Ses</button>
+
+    <div id="overlay" class="overlay">
+      <div class="panel">
+        <p class="brand">Zıpla Ada</p>
+        <h1 id="overlay-title">Macera başlıyor</h1>
+        <p id="overlay-msg">Kısa seviyeler, büyük zıplamalar. Bayrağa ulaş!</p>
+        <button id="overlay-btn" type="button">Başla</button>
+      </div>
+    </div>
+
+    <div id="touch" class="touch">
+      <div class="touch-left">
+        <button type="button" data-dir="left" aria-label="Sol">◀</button>
+        <button type="button" data-dir="right" aria-label="Sağ">▶</button>
+      </div>
+      <div class="touch-right">
+        <button type="button" data-dir="jump" aria-label="Zıpla">▲</button>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
